@@ -1,41 +1,3 @@
-var map, featureLayers = [], featureLayersName = [];
-
-//Site specific variables...
-//these probably should be abstrated out into an optional local config file and/or local values pulled in from the getcapabilities request
-
-//Native projection from GeoServer WFS
-var src = new Proj4js.Proj('EPSG:4326');
-var dst = new Proj4js.Proj('EPSG:28355');
-
-//Attribution, get from WMS?
-var layerAttribution = 'Data &copy <a href=http://maps.gcc.tas.gov.au>GCC</a>, <a href="https://maps.gcc.tas.gov.au/licensing.html">CC-BY</a>';
-
-//Define base layers
-var LISTTopographic = new L.tileLayer("https://services.thelist.tas.gov.au/arcgis/rest/services/Basemaps/Topographic/ImageServer/tile/{z}/{y}/{x}", {
-    attribution: "Basemap &copy The LIST",
-    maxZoom: 20,
-    maxNativeZoom: 18
-});
-
-var LISTAerial = new L.tileLayer("https://services.thelist.tas.gov.au/arcgis/rest/services/Basemaps/Orthophoto/ImageServer/tile/{z}/{y}/{x}", {
-    attribution: "Basemap &copy The LIST",
-    maxZoom: 20,
-    maxNativeZoom: 19
-});
-
-var baseLayers = {
-  "LIST Basemap": LISTTopographic,
-  "LIST Imagery": LISTAerial
-};
-
-var startCenter = new L.LatLng(-42.8232,147.2555);
-var startZoom = 12;
-var searchBounds = new google.maps.LatLngBounds(
-    new google.maps.LatLng(-42.9063,147.1335),
-    new google.maps.LatLng(-42.7167, 147.3444));
-
-owsurl = "https://maps.gcc.tas.gov.au/geoserver/GCC_cc/ows";
-
 $(document).on("click", ".feature-row", function(e) {
   sidebarClick(parseInt($(this).attr('id')),layerControl);
 });
@@ -48,8 +10,8 @@ $("#full-extent-btn").click(function() {
 $("#legend-btn").click(function() {
   //TODO: add all the currently added layers here, not just one...
   var text = "";
-  for (i = 0; i < intLayers.length; i++) { 
-    text += "<b>" + intLayers[i] + "</b><br><img src=https://maps.gcc.tas.gov.au/geoserver/GCC_cc/ows?service=wms&request=getlegendgraphic&layer=" + intLayers[i] + "&format=image/png><br>";
+  if(currentBaseLayer) {
+    text += "<b>" + featureLayersName[currentLayerIndex] + "</b><br><img src=https://maps.gcc.tas.gov.au/geoserver/ows?service=wms&request=getlegendgraphic&layer=" + featureLayers[currentLayerIndex] + "&format=image/png><br>";
   }
   $("#legend").html(text);
   $('#legendModal').modal('show');
@@ -82,14 +44,109 @@ $('#search-form').submit(function(e) {
     alert("Working....");
 });
 
-//this is where I add the layer.
+var map, featureLayers = [], featureLayersName = [];
+
+//Native projection from GeoServer WFS
+var src = new Proj4js.Proj('EPSG:4326');
+var dst = new Proj4js.Proj('EPSG:28355');
+
+//Attribution, get from WMS?
+var layerAttribution = 'Data &copy <a href=http://maps.gcc.tas.gov.au>GCC</a>, <a href="https://maps.gcc.tas.gov.au/licensing.html">CC-BY</a>';
+
+
+var startCenter = new L.LatLng(-42.8232,147.2555);
+var startZoom = 12;
+var searchBounds = new google.maps.LatLngBounds(
+    new google.maps.LatLng(-42.9063,147.1335),
+    new google.maps.LatLng(-42.7167, 147.3444));
+
+owsURL = "https://maps.gcc.tas.gov.au/geoserver/ows";
+wmsURL = "https://maps.gcc.tas.gov.au/geoserver/gwc/service/wms";
+
+var ps_baseLabels = new L.TileLayer.WMS(wmsURL, {
+        layers: 'gcc_ips:gips_baselayers',
+        format: 'image/png',
+        transparent: true,
+        maxZoom: 20,
+        attribution: layerAttribution
+    });
+
+var image = new L.tileLayer("https://services.thelist.tas.gov.au/arcgis/rest/services/Basemaps/Orthophoto/ImageServer/tile/{z}/{y}/{x}", {
+    attribution: "Base Imagery from <a href=http://www.thelist.tas.gov.au>the LIST</a> &copy State of Tasmania",
+    maxZoom: 20,
+    maxNativeZoom: 19,
+    opacity: 0.6,
+    transparent: true
+});
+
+var ps = new L.TileLayer.WMS(wmsURL, {
+    layers: 'gcc_ips:gips_zoning',
+    format: 'image/png',
+    transparent: true,
+    maxZoom: 20,
+    attribution: layerAttribution
+});
+
+var ie = L.Browser.ie;
+
+var baseLayers = {
+  'Zoning': ps
+};
+
+var overlays = {
+    "Aerial Image": image,
+    "Labels and Boundaries": ps_baseLabels
+};
+
+var overlaysList = {
+    "E3 Landslide Code": 'LDS_Landslide_Glenorchy',
+    "E8 Electricity Transmission Infrastructure Protection Code": 'ETP_ElecTranInfraProtection_Glenorchy',
+    "E10 Biodiversity Code": 'NAT_Biodiversity_Glenorchy',
+    "E11(a) Waterway and Coastal Protection Code": 'WAT_WaterwayCoastProtection_Glenorchy',
+    "E11(b) Waterway and Coastal Protection Code": 'REF_CoastRefugia_Glenorchy',
+    "E14 Scenic Landscapes Code": 'SCN_ScenicManagement_Glenorchy',
+    "E15 Inundation Prone Areas Code": 'FLD_FloodProne_Glenorchy',
+    "E16 Coastal Erosion Hazard Code": 'CST_CoastErosion_Glenorchy',
+    "E20 Acid Sulfate Soils Code": 'ASS_CoastAcidSulf_Glenorchy',
+    "E21 Dispersive Soils Code": 'DSP_DispersiveSoil_Glenorchy',
+    "E24 Significant Trees Code": 'TRE_SignificantTrees_Glenorchy',
+    "E25 Streetscape Character Code": 'SSC_StreetscapeChar_Glenorchy',
+    "F Specific Area Plans": 'SAP_Glenorchy'
+};
+
+var referenceLayersList = {
+  "example": 'layer'
+}
+
+var layerIndex = 1;
+
+//Add zoning to list
+$("#feature-list tbody").append('<tr class="feature-row" id="'+0+'">\
+    <td style="vertical-align: middle;"><i class="fa fa-area-chart"></i></td><td class="feature-name">Zoning</td>\
+    <td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
+featureLayers.push("gcc_ips:gips_zoning")
+featureLayersName.push('Zoning')
+
+for (layer in overlaysList) {
+  featureLayers.push("gcc_ips:"+overlaysList[layer])
+  featureLayersName.push(layer)
+  $("#feature-list tbody").append('<tr class="feature-row" id="'+layerIndex+'">\
+    <td style="vertical-align: middle;"><i class="fa fa-bars"></i></td><td class="feature-name">'+layer+'</td>\
+    <td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
+  layerIndex = layerIndex + 1;
+};
+
+//this is where I add the layer. Primed with Zoning.
+var currentBaseLayer = ps;
+var currentLayerIndex = 0;
+
 function sidebarClick(id) {
-  var layer = featureLayers[id];
-  var index = $.inArray(layer, intLayers);//intLayers.indexOf(layer);
-  //only add the layer if it's not added already...
-  if(index == -1) {
-    addLayer(layer);    
+  if(currentBaseLayer) {
+    map.removeLayer(currentBaseLayer);
   }
+  currentLayerIndex = id;
+  //TODO: change this to remove other layers.
+  addLayer(featureLayers[id]);
 }
 
 function addLayer(layer) {
@@ -97,20 +154,24 @@ function addLayer(layer) {
   if(id === -1) {
     return;
   }
-  var newLayer = new L.TileLayer.WMS(owsurl + "?SERVICE=WMS&", {
+  var newLayer = new L.TileLayer.WMS(wmsURL + "?SERVICE=WMS&", {
           layers: layer,
           format: 'image/png',
           transparent: true,
           maxZoom: 20,
           attribution: layerAttribution
   });
-  lOverlays[featureLayersName[id]] = newLayer;
-  map.addLayer(newLayer);
+
+  currentBaseLayer = newLayer;
+
   map.removeControl(layerControl);
-  updateInteractiveLayers(layer);
-  layerControl = L.control.layers(baseLayers, lOverlays, {
+  baseLayers = {}  
+  baseLayers[featureLayersName[id]] = newLayer;
+  layerControl = L.control.layers(baseLayers, overlays, {
     collapsed: isCollapsed
   }).addTo(map);
+
+  map.addLayer(newLayer);
   /* Hide sidebar and go to the map on small screens */
   if (document.body.clientWidth <= 767) {
     $("#sidebar").hide();
@@ -118,54 +179,16 @@ function addLayer(layer) {
   }
 }
 
-//GeoServer Layers
-var lOverlays = {};
+map = L.map("map", {
+  zoom: startZoom,
+  center: startCenter,
+  layers: [ps_baseLabels],
+  zoomControl: false,
+  attributionControl: false
+});
 
-var intLayers = [];
-var intLayersString = "";
-function updateInteractiveLayers(layer) {
-    var index = $.inArray(layer, intLayers);//intLayers.indexOf(layer);
-    if(index > -1) {
-        intLayers.splice(index,1);
-    } else {
-        intLayers.push(layer);
-    }
-    intLayersString = intLayers.join();
-};
-
-function handleJson(data) {
-    selectedFeature = L.geoJson(data, {
-        style: function (feature) {
-            return {color: 'yellow'};
-        },
-        onEachFeature: function (feature, layer) {
-            var content = "";
-            content = content + "<b><u>" + feature.id.split('.')[0] + "</b></u><br>";
-            delete feature.properties.bbox;
-            for (var name in feature.properties) {content = content + "<b>" + name + ":</b> " + feature.properties[name] + "<br>"};
-            var popup = L.popup()
-                .setLatLng(queryCoordinates)
-                .setContent(content)
-                .openOn(map);
-            layer.bindPopup(content);
-            layer.on({
-                mouseover: highlightFeature,
-                mouseout: resetHighlight
-            });
-        },                
-        pointToLayer: function (feature, latlng) {
-            return L.circleMarker(latlng, {
-                radius: 5,
-                fillColor: "yellow",
-                color: "#000",
-                weight: 5,
-                opacity: 0.6,
-                fillOpacity: 0.2
-            });
-        }
-    });
-    selectedFeature.addTo(map);
-}
+//Start with Zoning.
+map.addLayer(ps);
 
 //Query layer functionality.
 var selectedFeature;
@@ -197,60 +220,63 @@ function resetHighlight(e) {
     });
 }
 
-map = L.map("map", {
-  zoom: startZoom,
-  center: startCenter,
-  layers: [LISTTopographic],
-  zoomControl: false,
-  attributionControl: false
-});
-
-//Set up trigger functions for adding layers to interactivity.
-map.on('overlayadd', function(e) {
-    updateInteractiveLayers(e.layer.options.layers);
-}); 
-map.on('overlayremove', function(e) {
-    updateInteractiveLayers(e.layer.options.layers);
-}); 
-
-map.on('click', function(e) {
-    
-    if(intLayers.length === 0) {
-      return;
+function handleJson(data) {
+  if (selectedFeature) {
+    map.removeLayer(selectedFeature);
+  };
+  selectedFeature = L.geoJson(data, {
+    style: function (feature) {
+        return {color: 'blue'};
+    },
+    onEachFeature: function (feature, layer) {
+    var content = "<b>Address:</b> " + ((feature.properties.address) ? feature.properties.address : "")
+    + "<br><b>PID:</b> " + ((feature.properties.pid != -9999) ? feature.properties.pid : "")
+    + "<br><b>Zones:</b> " + feature.properties.zones
+    + "<br><b>Overlays:</b> " + ((feature.properties.overlays) ? feature.properties.overlays : "none")
+    + "<br><b>Reference Layers:</b> " + ((feature.properties.refLayers) ? feature.properties.overlays : "none")
+    + "<br>Note: Other codes may be triggered by description, refer to &quotApplication&quot section in each code.";
+    var popup = L.popup()
+        .setLatLng(queryCoordinates)
+        .setContent(content)
+        .openOn(map);
+        layer.bindPopup(content);
+    queryAddress = feature.properties.address;
     }
-    if (selectedFeature) {
-        map.removeLayer(selectedFeature);
-    };
-    
-    var p = new Proj4js.Point(e.latlng.lng,e.latlng.lat);
-    Proj4js.transform(src, dst, p);
-    queryCoordinates = e.latlng;
-    
-    var defaultParameters = {
-        service : 'WFS',
-        version : '1.1.1',
-        request : 'GetFeature',
-        typeName : intLayersString,
-        maxFeatures : 100,
-        outputFormat : 'text/javascript',
-        format_options : 'callback:getJson',
-        SrsName : 'EPSG:4326'
-    };
+  });
+  selectedFeature.addTo(map);
+}
 
-    var customParams = {
-        cql_filter:'DWithin(geom, POINT(' + p.x + ' ' + p.y + '), 10, meters)'
-    };
+map.on('click', function(e) {        
+  var p = new Proj4js.Point(e.latlng.lng,e.latlng.lat);
+  Proj4js.transform(src, dst, p);
+  queryCoordinates = e.latlng
+  
+  var defaultParameters = {
+    service : 'WFS',
+    version : '1.1.1',
+    request : 'GetFeature',
+    typeName : 'gcc_ips:GlenorchyInterimPlanningScheme',
+    maxFeatures : 100,
+    outputFormat : 'text/javascript',
+    format_options : 'callback:getJson',
+    SrsName : 'EPSG:4326'
+  };
 
-    var parameters = L.Util.extend(defaultParameters, customParams);
+  var customParams = {
+    //bbox : map.getBounds().toBBoxString(),
+    cql_filter:'CONTAINS(geom, POINT(' + p.x + ' ' + p.y + '))'
+  };
 
-    var url = owsurl + L.Util.getParamString(parameters)
+  var parameters = L.Util.extend(defaultParameters, customParams);
 
-    $.ajax({
-        url : owsurl + L.Util.getParamString(parameters),
-        dataType : 'jsonp',
-        jsonpCallback : 'getJson',
-        success : handleJson
-    });
+  //console.log(owsURL+L.Util.getParamString(parameters));
+
+  $.ajax({
+      url : owsURL + L.Util.getParamString(parameters),
+      dataType : 'jsonp',
+      jsonpCallback : 'getJson',
+      success : handleJson
+  });
 });
 
 /* Attribution control */
@@ -273,83 +299,24 @@ map.on("layerremove", updateAttribution);
 var attributionControl = L.control({
   position: "bottomright"
 });
+
 attributionControl.onAdd = function (map) {
   var div = L.DomUtil.create("div", "leaflet-control-attribution");
-  div.innerHTML = "<span class='hidden-xs'>Developed by <a href='http://bryanmcbride.com'>bmb</a> and <a href='http://agl.pw'>agl</a> | </span><a href='#' onclick='$(\"#attributionModal\").modal(\"show\"); return false;'>Attribution</a>";
+  div.innerHTML = "<span class='hidden-xs'>Developed by <a href='http://agl.pw'>agl</a> | </span><a href='#' onclick='$(\"#attributionModal\").modal(\"show\"); return false;'>Dataset Attribution</a>";
   return div;
 };
+
 map.addControl(attributionControl);
 
 var zoomControl = L.control.zoom({
-  position: "bottomright"
+  position: "topleft"
 }).addTo(map);
 
-/* GPS enabled geolocation control set to follow the user's location */
-var locateControl = L.control.locate({
-  position: "bottomright",
-  drawCircle: true,
-  follow: true,
-  setView: true,
-  keepCurrentZoomLevel: true,
-  markerStyle: {
-    weight: 1,
-    opacity: 0.8,
-    fillOpacity: 0.8
-  },
-  circleStyle: {
-    weight: 1,
-    clickable: false
-  },
-  icon: "icon-direction",
-  metric: false,
-  strings: {
-    title: "My location",
-    popup: "You are within {distance} {unit} from this point",
-    outsideMapBoundsMsg: "You seem located outside the boundaries of the map"
-  },
-  locateOptions: {
-    maxZoom: 18,
-    watch: true,
-    enableHighAccuracy: true,
-    maximumAge: 10000,
-    timeout: 10000
-  }
+L.control.locate({
+  position: 'bottomright',  
+  drawCircle: false,
+  follow: true
 }).addTo(map);
-
-$.ajax({
-    type: "GET",
-    url: owsurl + "?SERVICE=WMS&request=getcapabilities",
-    dataType: "xml",
-    success: parseXml
-  });
-
-function parseXml(xml)
-{
-  var layerIndex = 0
-  $(xml).find("Layer").find("Layer").each(function()
-  {
-    var title = $(this).find("Title").first().text();
-    var name = $(this).find("Name").first().text();
-
-    //Check for layer groups
-    var patt = new RegExp("Group");
-    var res = patt.test(title);
-    if(!res) {
-    featureLayers.push(name)
-      featureLayersName.push(title)
-      $("#feature-list tbody").append('<tr class="feature-row" id="'+layerIndex+'"><td style="vertical-align: middle;"><img width="16" height="18" src="assets/img/museum.png"></td><td class="feature-name">'+title+'</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
-      layerIndex = layerIndex + 1;
-    }
-  });
-
-//Check for initial layers.
-var layersString = QueryString.layers;
-if(layersString) {
-  var layersList = layersString.split(',')
-  for (i = 0; i < layersList.length; i++) { 
-    addLayer(layersList[i].replace('/',''));
-  }
-}
 
 //Ok, got to get the searching working...
 $(document).ready(function () {
@@ -386,8 +353,7 @@ google.maps.event.addListener(autocomplete, 'place_changed', function() {
     var leafLocation = new L.LatLng(place.geometry.location.lat(),place.geometry.location.lng())
     leafMarker = L.marker(leafLocation, {title: place.formatted_address}).bindPopup(place.formatted_address).addTo(map);
     map.setView(leafLocation, 18)
-}); 
-}
+});
 
 /* Larger screens get expanded layer control and visible sidebar */
 if (document.body.clientWidth <= 767) {
@@ -396,9 +362,9 @@ if (document.body.clientWidth <= 767) {
   var isCollapsed = false;
 }
 
-var layerControl = L.control.layers(baseLayers, lOverlays, {
-  collapsed: isCollapsed
-}).addTo(map);
+var layerControl = L.control.layers(baseLayers, overlays, {
+    collapsed: isCollapsed
+  }).addTo(map);
 
 /* Highlight search box text on click */
 $("#searchbox").click(function () {
