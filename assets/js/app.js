@@ -11,7 +11,7 @@ $("#legend-btn").click(function() {
   //TODO: add all the currently added layers here, not just one...
   var text = "";
   if(currentBaseLayer) {
-    text += "<b>" + featureLayersName[currentLayerIndex] + "</b><br><img src=https://maps.gcc.tas.gov.au/geoserver/ows?service=wms&request=getlegendgraphic&layer=" + featureLayers[currentLayerIndex] + "&format=image/png><br>";
+    text += "<b>" + featureLayersName[currentLayerIndex] + "</b><br><img src=https://maps.gcc.tas.gov.au/geoserver/ows?service=wms&request=getlegendgraphic&layer=" + featureLayers[currentLayerIndex] + "&format=image/png&LEGEND_OPTIONS=forceLabels:on><br>";
   }
   $("#legend").html(text);
   $('#legendModal').modal('show');
