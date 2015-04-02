@@ -110,12 +110,15 @@ var overlaysList = {
     "E20 Acid Sulfate Soils Code": 'ASS_CoastAcidSulf_Glenorchy',
     "E21 Dispersive Soils Code": 'DSP_DispersiveSoil_Glenorchy',
     "E24 Significant Trees Code": 'TRE_SignificantTrees_Glenorchy',
-    "E25 Streetscape Character Code": 'SSC_StreetscapeChar_Glenorchy',
+    //"E25 Streetscape Character Code": 'SSC_StreetscapeChar_Glenorchy',
     "F Specific Area Plans": 'SAP_Glenorchy'
 };
 
 var referenceLayersList = {
-  "example": 'layer'
+  "Title Reference": 'PScheme_Ref_Title',
+  "Attenuation Reference": 'Pscheme_Ref_Attenuation',
+  "Heritage Reference": 'Pscheme_Ref_Heritage',
+  "Riverine Hazard Reference": 'Pscheme_Ref_RiverineHazard'
 }
 
 var layerIndex = 1;
@@ -132,6 +135,15 @@ for (layer in overlaysList) {
   featureLayersName.push(layer)
   $("#feature-list tbody").append('<tr class="feature-row" id="'+layerIndex+'">\
     <td style="vertical-align: middle;"><i class="fa fa-bars"></i></td><td class="feature-name">'+layer+'</td>\
+    <td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
+  layerIndex = layerIndex + 1;
+};
+
+for (layer in referenceLayersList) {
+  featureLayers.push("gcc_ips:"+referenceLayersList[layer])
+  featureLayersName.push(layer)
+  $("#feature-list tbody").append('<tr class="feature-row" id="'+layerIndex+'">\
+    <td style="vertical-align: middle;"><i class="fa fa-ellipsis-h"></i></td><td class="feature-name">'+layer+'</td>\
     <td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
   layerIndex = layerIndex + 1;
 };
@@ -233,8 +245,8 @@ function handleJson(data) {
     + "<br><b>PID:</b> " + ((feature.properties.pid != -9999) ? feature.properties.pid : "")
     + "<br><b>Zones:</b> " + feature.properties.zones
     + "<br><b>Overlays:</b> " + ((feature.properties.overlays) ? feature.properties.overlays : "none")
-    + "<br><b>Reference Layers:</b> " + ((feature.properties.refLayers) ? feature.properties.overlays : "none")
-    + "<br>Note: Other codes may be triggered by description, refer to &quotApplication&quot section in each code.";
+    + "<br><b>Reference Layers:</b> " + ((feature.properties.reflayers) ? feature.properties.reflayers : "none")
+    + "<br><b>Note:</b> Other codes may be triggered by description, refer to &quotApplication&quot section in each code.";
     var popup = L.popup()
         .setLatLng(queryCoordinates)
         .setContent(content)
