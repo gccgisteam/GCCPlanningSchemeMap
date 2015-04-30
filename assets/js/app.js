@@ -51,7 +51,7 @@ var src = new Proj4js.Proj('EPSG:4326');
 var dst = new Proj4js.Proj('EPSG:28355');
 
 //Attribution, get from WMS?
-var layerAttribution = 'Data &copy <a href=http://maps.gcc.tas.gov.au>GCC</a>, <a href="https://maps.gcc.tas.gov.au/licensing.html">CC-BY</a>';
+var layerAttribution = 'Data &copy <a href=http://maps.gcc.tas.gov.au>GCC</a>, Data to be used for Council related purposes only.';
 
 
 var startCenter = new L.LatLng(-42.8232,147.2555);
@@ -68,7 +68,7 @@ var PScheme_BaseLabels = new L.TileLayer.WMS(wmsURL, {
         format: 'image/png',
         transparent: true,
         maxZoom: 20,
-        attribution: layerAttribution
+        attribution: 'Base data from <a href=http://www.thelist.tas.gov.au>the LIST</a>, &copy State of Tasmania.'
     });
 
 var image = new L.tileLayer("https://services.thelist.tas.gov.au/arcgis/rest/services/Basemaps/Orthophoto/ImageServer/tile/{z}/{y}/{x}", {
