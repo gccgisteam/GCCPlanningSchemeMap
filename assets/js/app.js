@@ -63,8 +63,8 @@ var searchBounds = new google.maps.LatLngBounds(
 owsURL = "https://maps.gcc.tas.gov.au/geoserver/ows";
 wmsURL = "https://maps.gcc.tas.gov.au/geoserver/gwc/service/wms";
 
-var ps_baseLabels = new L.TileLayer.WMS(wmsURL, {
-        layers: 'gcc_ips:gips_baselayers',
+var PScheme_BaseLabels = new L.TileLayer.WMS(wmsURL, {
+        layers: 'gcc_ips:PScheme_BaseLabels',
         format: 'image/png',
         transparent: true,
         maxZoom: 20,
@@ -80,7 +80,7 @@ var image = new L.tileLayer("https://services.thelist.tas.gov.au/arcgis/rest/ser
 });
 
 var ps = new L.TileLayer.WMS(wmsURL, {
-    layers: 'gcc_ips:gips_zoning',
+    layers: 'gcc_ips:PScheme_Zoning',
     format: 'image/png',
     transparent: true,
     maxZoom: 20,
@@ -95,30 +95,30 @@ var baseLayers = {
 
 var overlays = {
     "Aerial Image": image,
-    "Labels and Boundaries": ps_baseLabels
+    "Labels and Boundaries": PScheme_BaseLabels
 };
 
 var overlaysList = {
-    "E3 Landslide Code": 'LDS_Landslide_Glenorchy',
-    "E8 Electricity Transmission Infrastructure Protection Code": 'ETP_ElecTranInfraProtection_Glenorchy',
-    "E10 Biodiversity Code": 'NAT_Biodiversity_Glenorchy',
-    "E11(a) Waterway and Coastal Protection Code": 'WAT_WaterwayCoastProtection_Glenorchy',
-    "E11(b) Waterway and Coastal Protection Code": 'REF_CoastRefugia_Glenorchy',
-    "E14 Scenic Landscapes Code": 'SCN_ScenicManagement_Glenorchy',
-    "E15 Inundation Prone Areas Code": 'FLD_FloodProne_Glenorchy',
-    "E16 Coastal Erosion Hazard Code": 'CST_CoastErosion_Glenorchy',
-    "E20 Acid Sulfate Soils Code": 'ASS_CoastAcidSulf_Glenorchy',
-    "E21 Dispersive Soils Code": 'DSP_DispersiveSoil_Glenorchy',
-    "E24 Significant Trees Code": 'TRE_SignificantTrees_Glenorchy',
-    //"E25 Streetscape Character Code": 'SSC_StreetscapeChar_Glenorchy',
-    "F Specific Area Plans": 'SAP_Glenorchy'
+    "E3 Landslide Code": 'PScheme_Oly_Landslide',
+    "E8 Electricity Transmission Infrastructure Protection Code": 'PScheme_Oly_ElecTransInfraProtection',
+    "E10 Biodiversity Code": 'PScheme_Oly_Biodiversity',
+    "E11(a) Waterway and Coastal Protection Code": 'PScheme_Oly_WaterwayCoastalProtectionA',
+    "E11(b) Waterway and Coastal Protection Code": 'PScheme_Oly_WaterwayCoastalProtectionB',
+    "E14 Scenic Landscapes Code": 'PScheme_Oly_ScenicLandscapes',
+    "E15 Inundation Prone Areas Code": 'PScheme_Oly_InundationProneAreas',
+    "E16 Coastal Erosion Hazard Code": 'PScheme_Oly_CoastalErosionHazard',
+    "E20 Acid Sulfate Soils Code": 'PScheme_Oly_AcidSulfateSoils',
+    "E21 Dispersive Soils Code": 'PScheme_Oly_DispersiveSoils',
+    "E24 Significant Trees Code": 'PScheme_Oly_SignificantTrees',
+    "F Specific Area Plans": 'PScheme_SpecificAreaPlans'
 };
 
 var referenceLayersList = {
-  "Title Reference": 'PScheme_Ref_Title',
   "Attenuation Reference": 'Pscheme_Ref_Attenuation',
   "Heritage Reference": 'Pscheme_Ref_Heritage',
-  "Riverine Hazard Reference": 'Pscheme_Ref_RiverineHazard'
+  "Riverine Hazard Reference": 'Pscheme_Ref_RiverineHazard',
+  "Title Reference": 'PScheme_Ref_Title',
+  "Wellington Park Reference": 'PScheme_Ref_WellingtonPark'
 }
 
 var layerIndex = 1;
@@ -194,7 +194,7 @@ function addLayer(layer) {
 map = L.map("map", {
   zoom: startZoom,
   center: startCenter,
-  layers: [ps_baseLabels],
+  layers: [PScheme_BaseLabels],
   zoomControl: false,
   attributionControl: false
 });
@@ -241,12 +241,14 @@ function handleJson(data) {
         return {color: 'blue'};
     },
     onEachFeature: function (feature, layer) {
-    var content = "<b>Address:</b> " + ((feature.properties.address) ? feature.properties.address : "")
-    + "<br><b>PID:</b> " + ((feature.properties.pid != -9999) ? feature.properties.pid : "")
-    + "<br><b>Zones:</b> " + feature.properties.zones
-    + "<br><b>Overlays:</b> " + ((feature.properties.overlays) ? feature.properties.overlays : "none")
-    + "<br><b>Reference Layers:</b> " + ((feature.properties.reflayers) ? feature.properties.reflayers : "none")
-    + "<br><b>Note:</b> Other codes may be triggered by description, refer to &quotApplication&quot section in each code.";
+    var content ='<table class="table table-striped table-condensed table-bordered">'
+    +'<tr><td><b>Address</b></td><td>'+((feature.properties.address) ? feature.properties.address : "")+'</td></tr>'
+    +'<tr><td><b>PID</b></td><td>'+((feature.properties.pid != -9999) ? feature.properties.pid : "")+'</td></tr>'
+    +'<tr><td><b>Zones</b></td><td>'+feature.properties.zones+'</td></tr>'
+    +'<tr><td><b>Overlays</b></td><td>'+((feature.properties.overlays) ? feature.properties.overlays : "none")+'</td></tr>'
+    +'<tr><td><b>Reference Layers</b></td><td>'+((feature.properties.reflayers) ? feature.properties.reflayers : "")+'</td></tr>'
+    +'<tr><td><b>Note</b></td><td>Other codes may be triggered by description, refer to "Application" section in each code.</td></tr>'
+    +'</table>';
     var popup = L.popup()
         .setLatLng(queryCoordinates)
         .setContent(content)
@@ -267,7 +269,7 @@ map.on('click', function(e) {
     service : 'WFS',
     version : '1.1.1',
     request : 'GetFeature',
-    typeName : 'gcc_ips:GlenorchyInterimPlanningScheme',
+    typeName : 'gcc_ips:PScheme_Summary',
     maxFeatures : 100,
     outputFormat : 'text/javascript',
     format_options : 'callback:getJson',
