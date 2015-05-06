@@ -89,7 +89,7 @@ var ps = new L.TileLayer.WMS(wmsURL, {
 
 var ie = L.Browser.ie;
 
-var baseLayers = {
+var baseLayers = {https://maps.gcc.tas.gov.au/geoserver/ows?service=wms&request=getlegendgraphic&layer=gcc_ips:PScheme_Zoning&format=image/png&LEGEND_OPTIONS=forceLabels:on
   'Zoning': ps
 };
 
@@ -127,7 +127,7 @@ var layerIndex = 1;
 $("#feature-list tbody").append('<tr class="feature-row" id="'+0+'">\
     <td style="vertical-align: middle;"><i class="fa fa-area-chart"></i></td><td class="feature-name">Zoning</td>\
     <td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
-featureLayers.push("gcc_ips:gips_zoning")
+featureLayers.push("gcc_ips:PScheme_Zoning")
 featureLayersName.push('Zoning')
 
 for (layer in overlaysList) {
