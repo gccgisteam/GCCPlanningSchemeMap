@@ -106,7 +106,7 @@ input[type="radio"], input[type="checkbox"] {
   height: 50px;
 }
 
-.navbar-nav {
+.navbar-inverse .navbar-nav>li>a {
   color: #BDBDBD;
 }
 
