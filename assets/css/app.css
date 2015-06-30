@@ -105,6 +105,11 @@ input[type="radio"], input[type="checkbox"] {
   line-height: 50px;
   height: 50px;
 }
+
+.navbar-nav {
+  color: #BDBDBD;
+}
+
 .navbar-header a.navbar-icon {
   margin-left: 25px;
 }
