@@ -18,6 +18,17 @@ $("#legend-btn").click(function() {
   return false;
 });
 
+$("#zone-code-btn").click(function() {
+  //TODO: add all the currently added layers here, not just one...
+  var text = "";
+  if(currentBaseLayer) {
+    text += "<img src=assets/img/Pscheme_ZoneBoundary.png>";
+  }
+  $("#zonecode").html(text);
+  $('#zoneCodesModal').modal('show');
+  return false;
+});
+
 $("#list-btn").click(function() {
   $('#sidebar').toggle();
   map.invalidateSize();

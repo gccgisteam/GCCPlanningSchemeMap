@@ -32,6 +32,7 @@ input[type="radio"], input[type="checkbox"] {
     cursor: pointer;
     color: #ccc;
 }
+
 #map {
   width: auto;
   height: 100%;
@@ -185,4 +186,8 @@ input[type="radio"], input[type="checkbox"] {
   .leaflet-control-container {
     display: none !important;
   }
+}
+
+.modal-dialog {
+width: 1550px;
 }

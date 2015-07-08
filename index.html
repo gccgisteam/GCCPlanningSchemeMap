@@ -43,6 +43,7 @@
             <li class="hidden-xs"><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="list-btn"><i class="fa fa-list white"></i>&nbsp;&nbsp;Layer List</a></li>
             <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="full-extent-btn"><i class="fa fa-arrows-alt"></i>&nbsp;&nbsp;Zoom To Full Extent</a></li>
             <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="legend-btn"><i class="fa fa-picture-o"></i>&nbsp;&nbsp;Show Legend</a></li>
+			<li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="zone-code-btn"><i class="fa fa-list white"></i>&nbsp;&nbsp;Zone Boundary Codes</a></li>
         </ul>
       </div><!--/.navbar-collapse -->
     </div>
@@ -110,6 +111,23 @@
               <p align="left">The information on this layer is indicative and intended to flag the existence and locations of heritage listed places.  Please refer to the Heritage Listed Certificate of Title reference and Extent in the relevant Tables contained in the Historic  Heritage Code (E13.0 of the planning scheme) to determine the statutory listing boundaries.</p>
               <h4 align="left">Title reference layer</h3>
               <p align="left">This layer identifies specific properties referenced in the planning scheme by their Certificate of Title.  A cross reference to the relevant clause of the planning scheme is also provided.</p>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+	
+	<div class="modal fade" id="zoneCodesModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Non Cadastral Zone Boundary</h4>
+          </div>
+          <div class="modal-body">
+            <div id="zonecode"></div>
+          </div>
+          <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           </div>
         </div><!-- /.modal-content -->
