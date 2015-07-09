@@ -187,7 +187,3 @@ input[type="radio"], input[type="checkbox"] {
     display: none !important;
   }
 }
-
-.modal-dialog {
-width: 1550px;
-}
