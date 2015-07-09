@@ -18,17 +18,6 @@ $("#legend-btn").click(function() {
   return false;
 });
 
-$("#zone-code-btn").click(function() {
-  //TODO: add all the currently added layers here, not just one...
-  var text = "";
-  if(currentBaseLayer) {
-    text += "<img src=assets/img/Pscheme_ZoneBoundary.png>";
-  }
-  $("#zonecode").html(text);
-  $('#zoneCodesModal').modal('show');
-  return false;
-});
-
 $("#list-btn").click(function() {
   $('#sidebar').toggle();
   map.invalidateSize();
@@ -251,14 +240,19 @@ function handleJson(data) {
         return {color: 'blue'};
     },
     onEachFeature: function (feature, layer) {
-    var content ='<table class="table table-striped table-condensed table-bordered">'
-    +'<tr><td><b>Address</b></td><td>'+((feature.properties.address) ? feature.properties.address : "")+'</td></tr>'
-    +'<tr><td><b>PID</b></td><td>'+((feature.properties.pid != -9999) ? feature.properties.pid : "")+'</td></tr>'
-    +'<tr><td><b>Zones</b></td><td>'+feature.properties.zones+'</td></tr>'
-    +'<tr><td><b>Overlays</b></td><td>'+((feature.properties.overlays) ? feature.properties.overlays : "none")+'</td></tr>'
-    +'<tr><td><b>Reference Layers</b></td><td>'+((feature.properties.reflayers) ? feature.properties.reflayers : "")+'</td></tr>'
-    +'<tr><td><b>Note</b></td><td>Other codes may be triggered by description, refer to "Application" section in each code.</td></tr>'
-    +'</table>';
+	var head = '<table class="table table-striped table-condensed table-bordered">'
+		+'<tr><td><b>Address</b></td><td>'+((feature.properties.address) ? feature.properties.address : "")+'</td></tr>'
+		+'<tr><td><b>PID</b></td><td>'+((feature.properties.pid != -9999) ? feature.properties.pid : "")+'</td></tr>'
+		+'<tr><td><b>Zones</b></td><td>'+feature.properties.zones+'</td></tr>';
+	var mid = '<tr><td><b>Zone Boundary</b></td><td>'+((feature.properties.zonebdy) ? feature.properties.zonebdy : "none")+'</td></tr>';
+	var tail = '<tr><td><b>Overlays</b></td><td>'+((feature.properties.overlays) ? feature.properties.overlays : "none")+'</td></tr>'
+		+'<tr><td><b>Reference Layers</b></td><td>'+((feature.properties.reflayers) ? feature.properties.reflayers : "")+'</td></tr>'
+		+'<tr><td><b>Note</b></td><td>Other codes may be triggered by description, refer to "Application" section in each code.</td></tr>'
+		+'</table>';
+	if (feature.properties.zonebdy) {
+		var content = head + mid + tail;
+	} else { var content = head + tail;}
+	
     var popup = L.popup()
         .setLatLng(queryCoordinates)
         .setContent(content)
