@@ -115,6 +115,7 @@ var overlaysList = {
 var referenceLayersList = {
   "Attenuation Reference": 'Pscheme_Ref_Attenuation',
   "Heritage Reference": 'Pscheme_Ref_Heritage',
+  "Priority Biodiversity Values Reference": 'PScheme_Ref_PriorityBiodiversityValues',
   "Riverine Hazard Reference": 'Pscheme_Ref_RiverineHazard',
   "Title Reference": 'PScheme_Ref_Title',
   "Wellington Park Reference": 'PScheme_Ref_WellingtonPark'
