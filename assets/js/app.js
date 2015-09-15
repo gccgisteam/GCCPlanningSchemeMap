@@ -113,12 +113,12 @@ var overlaysList = {
 };
 
 var referenceLayersList = {
-  "Attenuation Reference": 'Pscheme_Ref_Attenuation',
-  "Heritage Reference": 'Pscheme_Ref_Heritage',
-  "Priority Biodiversity Values Reference": 'PScheme_Ref_PriorityBiodiversityValues',
-  "Riverine Hazard Reference": 'Pscheme_Ref_RiverineHazard',
+  "E9.0 Attenuation Reference": 'Pscheme_Ref_Attenuation',
+  "E13.0 Heritage Reference": 'Pscheme_Ref_Heritage',
+  "E10.0 Priority Biodiversity Values Reference": 'PScheme_Ref_PriorityBiodiversityValues',
+  "E15.0 Riverine Hazard Reference": 'Pscheme_Ref_RiverineHazard',
   "Title Reference": 'PScheme_Ref_Title',
-  "Wellington Park Reference": 'PScheme_Ref_WellingtonPark'
+  "F3 Wellington Park Reference": 'PScheme_Ref_WellingtonPark'
 }
 
 var layerIndex = 1;
