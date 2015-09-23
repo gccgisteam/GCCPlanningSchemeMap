@@ -102,7 +102,7 @@ var overlaysList = {
     "E3 Landslide Code": 'PScheme_Oly_Landslide',
     "E8 Electricity Transmission Infrastructure Protection Code": 'PScheme_Oly_ElecTransInfraProtection',
     "E10 Biodiversity Code": 'PScheme_Oly_Biodiversity',
-    "E11 Waterway and Coastal Protection Code": 'PScheme_Oly_WaterwayCoastalProtectionA',
+    "E11 Waterway and Coastal Protection Code": 'PScheme_Oly_WaterwayCoastalProtection',
     "E14 Scenic Landscapes Code": 'PScheme_Oly_ScenicLandscapes',
     "E15 Inundation Prone Areas Code": 'PScheme_Oly_InundationProneAreas',
     "E16 Coastal Erosion Hazard Code": 'PScheme_Oly_CoastalErosionHazard',
