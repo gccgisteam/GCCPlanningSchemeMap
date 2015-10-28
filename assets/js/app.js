@@ -321,7 +321,7 @@ var attributionControl = L.control({
 
 attributionControl.onAdd = function (map) {
   var div = L.DomUtil.create("div", "leaflet-control-attribution");
-  div.innerHTML = "<span class='hidden-xs'>Developed by <a href='http://agl.pw'>agl</a> | </span><a href='#' onclick='$(\"#attributionModal\").modal(\"show\"); return false;'>Dataset Attribution</a>";
+  div.innerHTML = "<span class='hidden-xs'>Developed by GCC</a> | </span><a href='#' onclick='$(\"#attributionModal\").modal(\"show\"); return false;'>Dataset Attribution</a>";
   return div;
 };
 
