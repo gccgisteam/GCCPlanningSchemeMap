@@ -113,10 +113,10 @@ var overlaysList = {
 };
 
 var referenceLayersList = {
-  "E9.0 Attenuation Reference": 'Pscheme_Ref_Attenuation',
-  "E13.0 Heritage Reference": 'Pscheme_Ref_Heritage',
+  "E9.0 Attenuation Reference": 'PScheme_Ref_Attenuation',
+  "E13.0 Heritage Reference": 'PScheme_Ref_Heritage',
   "E10.0 Priority Biodiversity Values Reference": 'PScheme_Ref_PriorityBiodiversityValues',
-  "E15.0 Riverine Hazard Reference": 'Pscheme_Ref_RiverineHazard',
+  "E15.0 Riverine Hazard Reference": 'PScheme_Ref_RiverineHazard',
   "Title Reference": 'PScheme_Ref_Title',
   "F3 Wellington Park Reference": 'PScheme_Ref_WellingtonPark'
 }
