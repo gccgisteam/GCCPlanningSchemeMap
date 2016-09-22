@@ -11,10 +11,10 @@
     <title>Glenorchy Interim Planning Scheme 2015</title>
 
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
     <link rel="stylesheet" href="assets/css/leaflet.css">
     <link rel="stylesheet" href="assets/locate/L.Control.Locate.css">
     <link rel="stylesheet" href="assets/css/app.css">
+	<link rel="stylesheet" href="assets/css/font-awesome.min.css">
 
     <link rel="apple-touch-icon" sizes="76x76" href="assets/img/favicon-76.png">
     <link rel="apple-touch-icon" sizes="120x120" href="assets/img/favicon-120.png">
@@ -43,6 +43,7 @@
             <li class="hidden-xs"><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="list-btn"><i class="fa fa-list white"></i>&nbsp;&nbsp;Layer List</a></li>
             <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="full-extent-btn"><i class="fa fa-arrows-alt"></i>&nbsp;&nbsp;Zoom To Full Extent</a></li>
             <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="legend-btn"><i class="fa fa-picture-o"></i>&nbsp;&nbsp;Show Legend</a></li>
+			<li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="howto-btn"><i class="fa fa-info-circle"></i>&nbsp;&nbsp;How to Use Webmap</a></li>
         </ul>
       </div><!--/.navbar-collapse -->
     </div>
@@ -111,6 +112,33 @@
               <h4 align="left">Title reference layer</h3>
               <p align="left">This layer identifies specific properties referenced in the planning scheme by their Certificate of Title.  A cross reference to the relevant clause of the planning scheme is also provided.</p>
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+	
+	<div class="modal fade" id="howToModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">How to Use Webmap</h4>
+          </div>
+          <div class="modal-body">
+		    <table class="table table-hover">
+			  <thead class="hidden">
+			    <tr><th>Description</th><th>Image</th><tr>
+			  </thead>
+			  <tbody id="howTo">
+			    <tr><td><p>To find a property enter the address in the Search box and select from the list.</p><p>This map only shows properties within the Glenorchy municipality.</p></td><td><img src="assets/img/search.png"></td></tr>
+				<tr><td><p>To get information about a property left click on the property.</p></td><td><img src="assets/img/info.png"></td></tr>
+				<tr><td><p>To zoom in or our use the zoom control at the top left of the maps.</p></td><td><img src="assets/img/zoom.png"></td><tr>
+				<tr><td><p>To change the layer you are viewing select the layer from the Layer List on the left hand side of the map.</p></td><td><img src="assets/img/layers.png"></td></tr>
+				<tr><td><p>To change the background or labels use the control at the top right of the map.</p></td><td><img src="assets/img/baselayers.png"></td></tr>
+				<tr><td><p>To move the map right click on an area, hold, and drag the mouse.</p></td><td><i class="fa fa-hand-grab-o"></i></td></tr>
+			  </tbody>
+		    </table>
+			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->

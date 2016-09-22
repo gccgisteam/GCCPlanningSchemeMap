@@ -60,6 +60,11 @@ input[type="radio"], input[type="checkbox"] {
 #aboutTabsContent {
   padding-top: 10px;
 }
+
+#howTo  img {
+  box-shadow: 2px 2px 4px #000;
+}
+
 .progress-bar-full {
   width: 100%;
 }

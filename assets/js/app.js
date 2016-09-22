@@ -18,6 +18,11 @@ $("#legend-btn").click(function() {
   return false;
 });
 
+$("#howto-btn").click(function() {
+  $('#howToModal').modal('show');
+  return false;
+});
+
 $("#list-btn").click(function() {
   $('#sidebar').toggle();
   map.invalidateSize();
